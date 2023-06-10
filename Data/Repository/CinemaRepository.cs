@@ -13,6 +13,18 @@ public class CinemaRepository
         Context = cinemaContext;
     }
 
+    public void EnsureCreated()
+    {
+        Context.Database.EnsureCreated();
+    }
+
+    #region Save
+
+    public int SaveChanges() => Context.SaveChanges();
+    public Task<int> SaveChangesAsync() => Context.SaveChangesAsync();
+    
+    #endregion
+
     #region AddToBase
 
     public void AddCinemaHall(CinemaHall entity)
