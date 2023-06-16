@@ -1,11 +1,12 @@
-﻿// See https://aka.ms/new-console-template for more information
-
-using Data.Model;
+﻿using Data.Model;
 using Data.Repository;
 
 
-CinemaRepository.Init(ConnectionType.Sqlite, "Data Source = cinema.db");
-CinemaRepository.EnsureCreated();
+//var repository = new Repository(ConnectionType.Sqlite, "Data Source = cinema.db");
+var repository = new Repository(ConnectionType.Sqlserver,
+    @"Server=(localdb)\msSqlLocalDb; Database=cinema; Trusted_Connection = true");
+Repository.EnsureDeleted();
+Repository.EnsureCreated();
 
 var user = new User
 {
@@ -14,14 +15,14 @@ var user = new User
     Email = "uolimzhanov@gmail.com",
     PhoneNumber = "+998901234567"
 };
-CinemaRepository.AddUser(user);
+Repository.AddUser(user);
 
 var cinemaHall = new CinemaHall
 {
     NumberOfSeats = 2,
     Class = "Premium"
 };
-CinemaRepository.AddCinemaHall(cinemaHall);
+Repository.AddCinemaHall(cinemaHall);
 
 var session = new Session
 {
@@ -31,7 +32,7 @@ var session = new Session
     MovieName = "A Knives Out Mystery: Glass Onion",
     SessionDuration = 132
 };
-CinemaRepository.AddSession(session);
+Repository.AddSession(session);
 
 var order = new Order
 {
@@ -40,9 +41,9 @@ var order = new Order
     User = user,
     PaymentStatus = true
 };
-CinemaRepository.AddOrder(order);
+Repository.AddOrder(order);
+Repository.SaveChanges();
 
-var toPrint = CinemaRepository.PrintOrders();
+var toPrint = Repository.PrintOrders();
 Console.WriteLine(toPrint);
 
-CinemaRepository.SaveChanges();

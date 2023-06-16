@@ -4,65 +4,69 @@ using Data.Model;
 
 namespace Data.Repository;
 
-public class CinemaRepository
+public class Repository
 {
-    private static CinemaContext Context { get; set; }
+    private static CinemaContext Context { get; set; } = null!;
 
-    public CinemaRepository(ConnectionType connectionType, string connectionString)
+    public Repository(ConnectionType connectionType, string connectionString)
     {
-        Context = CinemaContextContainer.Init(connectionType, connectionString);
+        Context = CinemaContextContainer.Init(connectionType, connectionString)!;
     }
 
-    public void EnsureCreated()
+    public static void EnsureCreated()
     {
         Context.Database.EnsureCreated();
+    }
+    public static void EnsureDeleted()
+    {
+        Context.Database.EnsureDeleted();
     }
 
     #region Save
 
-    public int SaveChanges() => Context.SaveChanges();
-    public Task<int> SaveChangesAsync() => Context.SaveChangesAsync();
+    public static int SaveChanges() => Context.SaveChanges();
+    public static Task<int> SaveChangesAsync() => Context.SaveChangesAsync();
     
     #endregion
 
     #region AddToBase
 
-    public void AddCinemaHall(CinemaHall entity)
+    public static void AddCinemaHall(CinemaHall entity)
     {
         Context.CinemaHalls.Add(entity);
     }
     
-    public void AddCinemaHallsRange(IEnumerable<CinemaHall> entities)
+    public static void AddCinemaHallsRange(IEnumerable<CinemaHall> entities)
     {
         Context.CinemaHalls.AddRange(entities);
     }
     
-    public void AddSession(Session entity)
+    public static void AddSession(Session entity)
     {
         Context.Sessions.Add(entity);
     }
     
-    public void AddSessionsRange(IEnumerable<Session> entities)
+    public static void AddSessionsRange(IEnumerable<Session> entities)
     {
         Context.Sessions.AddRange(entities);
     }
     
-    public void AddOrder(Order entity)
+    public static void AddOrder(Order entity)
     {
         Context.Orders.Add(entity);
     }
     
-    public void AddOrdersRange(IEnumerable<Order> entities)
+    public static void AddOrdersRange(IEnumerable<Order> entities)
     {
         Context.Orders.AddRange(entities);
     }
     
-    public void AddUser(User entity)
+    public static void AddUser(User entity)
     {
         Context.Users.Add(entity);
     }
 
-    public void AddUsersRange(IEnumerable<User> entities)
+    public static void AddUsersRange(IEnumerable<User> entities)
     {
         Context.Users.AddRange(entities);
     }
@@ -117,19 +121,19 @@ public class CinemaRepository
 
     public static CinemaHall? GetCinemaHallById(int id) => Context.CinemaHalls.Find(id);
 
-    public static List<CinemaHall> GetCinemaHalls() => Context.CinemaHalls.ToList();
+    public static IEnumerable<CinemaHall> GetCinemaHalls() => Context.CinemaHalls.ToList();
 
     public static Session? GetSessionById(int id) => Context.Sessions.Find(id);
 
-    public static List<Session> GetSessions() => Context.Sessions.ToList();
+    public static IEnumerable<Session> GetSessions() => Context.Sessions.ToList();
 
     public static User? GetUserById(int id) => Context.Users.Find(id);
 
-    public static List<User> GetUsers() => Context.Users.ToList();
+    public static IEnumerable<User> GetUsers() => Context.Users.ToList();
     
     public static Order? GetOrderById(int id) => Context.Orders.Find(id);
 
-    public static List<Order> GetOrders() => Context.Orders.ToList();
+    public static IEnumerable<Order> GetOrders() => Context.Orders.ToList();
 
     #endregion
 
