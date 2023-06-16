@@ -4,66 +4,65 @@ using Data.Model;
 
 namespace Data.Repository;
 
-public static class CinemaRepository
+public class CinemaRepository
 {
-    private static CinemaContext Context { get ; set; }
-    
+    private static CinemaContext Context { get; set; }
 
-    public static void Init(ConnectionType connectionType, string connectionString)
-    { 
+    public CinemaRepository(ConnectionType connectionType, string connectionString)
+    {
         Context = CinemaContextContainer.Init(connectionType, connectionString);
     }
 
-    public static void EnsureCreated()
+    public void EnsureCreated()
     {
         Context.Database.EnsureCreated();
     }
 
     #region Save
 
-    public static int SaveChanges() => Context.SaveChanges();
-    public static Task<int> SaveChangesAsync() => Context.SaveChangesAsync();
+    public int SaveChanges() => Context.SaveChanges();
+    public Task<int> SaveChangesAsync() => Context.SaveChangesAsync();
     
     #endregion
 
     #region AddToBase
 
-    public static void AddCinemaHall(CinemaHall entity)
+    public void AddCinemaHall(CinemaHall entity)
     {
         Context.CinemaHalls.Add(entity);
     }
     
-    public static void AddCinemaHallsRange(IEnumerable<CinemaHall> entities)
+    public void AddCinemaHallsRange(IEnumerable<CinemaHall> entities)
     {
         Context.CinemaHalls.AddRange(entities);
     }
     
-    public static void AddSession(Session entity)
+    public void AddSession(Session entity)
     {
         Context.Sessions.Add(entity);
     }
     
-    public static void AddSessionsRange(IEnumerable<Session> entities)
+    public void AddSessionsRange(IEnumerable<Session> entities)
     {
         Context.Sessions.AddRange(entities);
     }
     
-    public static void AddOrder(Order entity)
+    public void AddOrder(Order entity)
     {
         Context.Orders.Add(entity);
     }
     
-    public static void AddOrdersRange(IEnumerable<Order> entities)
+    public void AddOrdersRange(IEnumerable<Order> entities)
     {
         Context.Orders.AddRange(entities);
     }
     
-    public static void AddUser(User entity)
+    public void AddUser(User entity)
     {
         Context.Users.Add(entity);
     }
 
-    public static void AddUsersRange(IEnumerable<User> entities)
+    public void AddUsersRange(IEnumerable<User> entities)
     {
         Context.Users.AddRange(entities);
     }
@@ -72,42 +71,42 @@ public static class CinemaRepository
 
     #region RemoveFromBase
     
-    public static void RemoveCinemaHall(CinemaHall entity)
+    public void RemoveCinemaHall(CinemaHall entity)
     {
         Context.CinemaHalls.Remove(entity);
     }
     
-    public static void RemoveCinemaHallsRange(IEnumerable<CinemaHall> entities)
+    public void RemoveCinemaHallsRange(IEnumerable<CinemaHall> entities)
     {
         Context.CinemaHalls.RemoveRange(entities);
     }
     
-    public static void RemoveSession(Session entity)
+    public void RemoveSession(Session entity)
     {
         Context.Sessions.Remove(entity);
     }
     
-    public static void RemoveSessionsRange(IEnumerable<Session> entities)
+    public void RemoveSessionsRange(IEnumerable<Session> entities)
     {
         Context.Sessions.RemoveRange(entities);
     }
     
-    public static void RemoveOrder(Order entity)
+    public void RemoveOrder(Order entity)
     {
         Context.Orders.Remove(entity);
     }
     
-    public static void RemoveOrdersRange(IEnumerable<Order> entities)
+    public void RemoveOrdersRange(IEnumerable<Order> entities)
     {
         Context.Orders.RemoveRange(entities);
     }
     
-    public static void RemoveUser(User entity)
+    public void RemoveUser(User entity)
     {
         Context.Users.Remove(entity);
     }
 
-    public static void RemoveUsersRange(IEnumerable<User> entities)
+    public void RemoveUsersRange(IEnumerable<User> entities)
     {
         Context.Users.RemoveRange(entities);
     }
@@ -147,7 +146,7 @@ public static class CinemaRepository
     public static string PrintCinemaHalls()
     {
         var stringBuilder = new StringBuilder();
-        var entities = Context.CinemaHalls.Select(entity => PrintCinemaHall(entity.CinemaHallId)).ToList();
+        var entities = GetCinemaHalls().Select(entity => PrintCinemaHall(entity.CinemaHallId)).ToList();
         foreach (var entity in entities)
             stringBuilder.AppendLine(entity);
         return stringBuilder.ToString();
@@ -167,7 +166,7 @@ public static class CinemaRepository
     public static string PrintSessions()
     {
         var stringBuilder = new StringBuilder();
-        var entities = Context.Sessions.Select(entity => PrintSession(entity.SessionId)).ToList();
+        var entities = GetSessions().Select(entity => PrintSession(entity.SessionId)).ToList();
         foreach (var entity in entities)
             stringBuilder.AppendLine(entity);
         return stringBuilder.ToString();
@@ -185,7 +184,7 @@ public static class CinemaRepository
     public static string PrintUsers()
     {
         var stringBuilder = new StringBuilder();
-        var entities = Context.Sessions.Select(entity => PrintUser(entity.SessionId)).ToList();
+        var entities = GetUsers().Select(entity => PrintUser(entity.UserId)).ToList();
         foreach (var entity in entities)
             stringBuilder.AppendLine(entity);
         return stringBuilder.ToString();
@@ -205,7 +204,7 @@ public static class CinemaRepository
     public static string PrintOrders()
     {
         var stringBuilder = new StringBuilder();
-        var entities = Context.Sessions.Select(entity => PrintOrder(entity.SessionId)).ToList();
+        var entities = GetOrders().Select(entity => PrintOrder(entity.SessionId)).ToList();
         foreach (var entity in entities)
             stringBuilder.AppendLine(entity);
         return stringBuilder.ToString();
