@@ -1,19 +1,13 @@
 ﻿using System.Text;
 using Data.Database;
 using Data.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace Data.Repository;
 
 public static class Repository
 {
     private static CinemaContext Context { get; set; } = null!;
-
-    /*
-    public Repository(ConnectionType connectionType, string connectionString)
-    {
-        Context = CinemaContextContainer.Init(connectionType, connectionString)!;
-    }
-    */
 
     public static void Init(ConnectionType connectionType, string connectionString)
     {
@@ -162,6 +156,15 @@ public static class Repository
         return stringBuilder.ToString();
     }
 
+    public static string PrintCinemaHalls(IEnumerable<CinemaHall> cinemaHalls)
+    {
+        var stringBuilder = new StringBuilder();
+        var entities = cinemaHalls.Select(entity => PrintCinemaHall(entity.CinemaHallId)).ToList();
+        foreach (var entity in entities)
+            stringBuilder.AppendLine(entity);
+        return stringBuilder.ToString();
+    }
+
     public static string PrintSession(int id)
     {
         var entity = GetSessionById(id);
@@ -181,6 +184,14 @@ public static class Repository
             stringBuilder.AppendLine(entity);
         return stringBuilder.ToString();
     }    
+    public static string PrintSessions(IEnumerable<Session> sessions)
+    {
+        var stringBuilder = new StringBuilder();
+        var entities = sessions.Select(entity => PrintSession(entity.SessionId)).ToList();
+        foreach (var entity in entities)
+            stringBuilder.AppendLine(entity);
+        return stringBuilder.ToString();
+    }    
     
     public static string PrintUser(int id)
     {
@@ -195,6 +206,14 @@ public static class Repository
     {
         var stringBuilder = new StringBuilder();
         var entities = GetUsers().Select(entity => PrintUser(entity.UserId)).ToList();
+        foreach (var entity in entities)
+            stringBuilder.AppendLine(entity);
+        return stringBuilder.ToString();
+    }  
+    public static string PrintUsers(IEnumerable<User> users)
+    {
+        var stringBuilder = new StringBuilder();
+        var entities = users.Select(entity => PrintUser(entity.UserId)).ToList();
         foreach (var entity in entities)
             stringBuilder.AppendLine(entity);
         return stringBuilder.ToString();
@@ -220,5 +239,49 @@ public static class Repository
         return stringBuilder.ToString();
     }
     
+    public static string PrintOrders(IEnumerable<Order> orders)
+    {
+        var stringBuilder = new StringBuilder();
+        var entities = orders.Select(entity => PrintOrder(entity.SessionId)).ToList();
+        foreach (var entity in entities)
+            stringBuilder.AppendLine(entity);
+        return stringBuilder.ToString();
+    }
+    
     #endregion
+    
+    public static class Linq
+    {
+        public static IEnumerable<User> GetUsersWhoDidNotPay() => (from orders in Context.Orders.Include(u => u.User)
+            where orders.PaymentStatus == false
+            select orders.User).ToList();
+
+        public static IEnumerable<Order> GetOrdersCheaperThan(int price) =>
+            (from orders in Context.Orders where orders.Price <= price select orders).ToList();
+
+        public static IEnumerable<CinemaHall> GetHallsWithXSeats(int x) =>
+            (from halls in Context.CinemaHalls where halls.NumberOfSeats == x select halls).ToList();
+
+        public static IEnumerable<Session> GetMovieWithDurationMoreThan(int duration) =>
+            (from sessions in Context.Sessions where sessions.SessionDuration >= duration select sessions).ToList();
+        
+        public static IEnumerable<Session> GetMovieWithDurationLessThan(int duration) =>
+            (from sessions in Context.Sessions where sessions.SessionDuration <= duration select sessions).ToList();
+    }
+    
+    public static class SqlRaw
+    {
+        public static IEnumerable<User> GetUsersWhoNameLike(string scratch) => Context.Users.FromSqlRaw($"SELECT * FROM Users WHERE FullName LIKE %{scratch}%").ToList();
+
+        public static IEnumerable<Order> GetOrdersCheaperThan(int price) => Context.Orders.FromSqlRaw($"SELECT * FROM Orders WHERE Price >= {price}").ToList();
+
+        public static IEnumerable<CinemaHall> GetHallsWithXSeats(int x) =>
+            Context.CinemaHalls.FromSqlRaw($"SELECT * FROM CinemaHalls WHERE NumberOfSeats = {x}");
+
+        public static IEnumerable<Session> GetMovieWithDurationMoreThan(int duration) =>
+            Context.Sessions.FromSqlRaw($"SELECT * FROM Sessions WHERE SessionDuration >= ${duration}");
+        
+        public static IEnumerable<Session> GetMovieWithDurationLessThan(int duration) => 
+            Context.Sessions.FromSqlRaw($"SELECT * FROM Sessions WHERE SessionDuration <= ${duration}");
+    }
 }
