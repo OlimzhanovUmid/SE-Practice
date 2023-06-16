@@ -7,6 +7,7 @@ Repository.Init(ConnectionType.Sqlserver,
     @"Server=(localdb)\msSqlLocalDb; Database=cinema; Trusted_Connection = true");
 Repository.EnsureDeleted();
 Repository.EnsureCreated();
+Seed.Init();
 
 var user = new User
 {
