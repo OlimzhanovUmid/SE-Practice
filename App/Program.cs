@@ -2,9 +2,12 @@
 using Data.Repository;
 
 
-//var repository = new Repository(ConnectionType.Sqlite, "Data Source = cinema.db");
+//Repository.Init(ConnectionType.Sqlite, "Data Source = cinema.db");
+/*
 Repository.Init(ConnectionType.Sqlserver,
     @"Server=(localdb)\msSqlLocalDb; Database=cinema; Trusted_Connection = true");
+*/
+Repository.Init(ConnectionType.SqlserverLocaldb);
 Repository.EnsureDeleted();
 Repository.EnsureCreated();
 Seed.Init();

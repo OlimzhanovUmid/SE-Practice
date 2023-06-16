@@ -3,16 +3,23 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Data.Database;
 
-public class CinemaContext: DbContext
+public class AppContext: DbContext
 {
     private ConnectionType Type { get; set; } = ConnectionType.Sqlite;
     private string? ConnectionString { get; set; }
 
-    public CinemaContext(string newConnectionString)
+    private readonly string _localDbConnectionString =
+        @"Server=(localdb)\msSqlLocalDb; Database=cinema; Trusted_Connection = true";
+
+    public AppContext(string newConnectionString)
     {
         ConnectionString = newConnectionString;
     }
-    public CinemaContext(ConnectionType newType, string newConnectionString)
+    public AppContext(ConnectionType newType)
+    {
+        Type = newType;
+    }
+    public AppContext(ConnectionType newType, string newConnectionString)
     {
         Type = newType;
         ConnectionString = newConnectionString;
@@ -28,9 +35,13 @@ public class CinemaContext: DbContext
         if (Type.Equals(ConnectionType.Sqlite))
         {
             optionsBuilder.UseSqlite(ConnectionString);
-        } else
+        } else if(Type.Equals(ConnectionType.Sqlserver))
         {
             optionsBuilder.UseSqlServer(ConnectionString);
+        }
+        else
+        {
+            optionsBuilder.UseSqlServer(_localDbConnectionString);
         }
     }
 }

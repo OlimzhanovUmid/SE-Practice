@@ -2,16 +2,22 @@
 using Data.Database;
 using Data.Model;
 using Microsoft.EntityFrameworkCore;
+using AppContext = Data.Database.AppContext;
 
 namespace Data.Repository;
 
 public static class Repository
 {
-    private static CinemaContext Context { get; set; } = null!;
+    private static AppContext Context { get; set; } = null!;
 
     public static void Init(ConnectionType connectionType, string connectionString)
     {
         Context = CinemaContextContainer.Init(connectionType, connectionString)!;
+    }
+
+    public static void Init(ConnectionType connectionType)
+    {
+        Context = CinemaContextContainer.Init(connectionType)!;
     }
     public static void EnsureCreated()
     {

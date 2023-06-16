@@ -3,5 +3,6 @@
 public enum ConnectionType
 {
     Sqlite,
-    Sqlserver
+    Sqlserver,
+    SqlserverLocaldb
 }

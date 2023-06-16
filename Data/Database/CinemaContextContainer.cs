@@ -4,11 +4,16 @@ namespace Data.Database;
 
 public class CinemaContextContainer
 {
-    private static CinemaContext _context;
+    private static AppContext _context;
 
-    public static CinemaContext? Init(ConnectionType connectionType, string connectionString)
+    public static AppContext? Init(ConnectionType connectionType, string connectionString)
     {
-        var context = new CinemaContext(connectionType, connectionString);
+        var context = new AppContext(connectionType, connectionString);
+        return _context = context;
+    }
+    public static AppContext? Init(ConnectionType connectionType)
+    {
+        var context = new AppContext(connectionType);
         return _context = context;
     }
 }
