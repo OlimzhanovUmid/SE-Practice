@@ -1,5 +1,4 @@
-﻿namespace Data.Model;
-
+﻿namespace App.Model;
 public class Order
 {
     public int OrderId { get; set; }

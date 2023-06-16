@@ -1,11 +1,12 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using Data.Model;
-using Data.Repository;
 
+using App.Database;
+using App.Model;
 
-CinemaRepository.Init(ConnectionType.Sqlite, "Data Source = cinema.db");
-CinemaRepository.EnsureCreated();
+using var context = new CinemaContext(ConnectionType.Sqlite, "Data Source = cinema.db");
+context.Database.EnsureDeleted();
+context.Database.EnsureCreated();
 
 var user = new User
 {
@@ -14,14 +15,14 @@ var user = new User
     Email = "uolimzhanov@gmail.com",
     PhoneNumber = "+998901234567"
 };
-CinemaRepository.AddUser(user);
+context.Users.Add(user);
 
 var cinemaHall = new CinemaHall
 {
     NumberOfSeats = 2,
     Class = "Premium"
 };
-CinemaRepository.AddCinemaHall(cinemaHall);
+context.CinemaHalls.Add(cinemaHall);
 
 var session = new Session
 {
@@ -31,7 +32,7 @@ var session = new Session
     MovieName = "A Knives Out Mystery: Glass Onion",
     SessionDuration = 132
 };
-CinemaRepository.AddSession(session);
+context.Sessions.Add(session);
 
 var order = new Order
 {
@@ -40,9 +41,18 @@ var order = new Order
     User = user,
     PaymentStatus = true
 };
-CinemaRepository.AddOrder(order);
+context.Orders.Add(order);
+context.SaveChanges();
 
-var toPrint = CinemaRepository.PrintOrders();
-Console.WriteLine(toPrint);
+var entities = context.Orders.ToList();
+foreach (var entity in entities)
+{
+    Console.WriteLine($"{entity.OrderId}. " +
+                      $"Movie name: {entity.Session!.MovieName}, " +
+                      $"Date: {entity.Session!.Date} at {entity.Session!.Time}, " +
+                      $"Cinema hall class: {entity.Session!.CinemaHall!.Class}, " +
+                      $"Price: {entity.Price}, " +
+                      $"Is paid: {entity.PaymentStatus}");
+}
+Console.WriteLine();
 
-CinemaRepository.SaveChanges();

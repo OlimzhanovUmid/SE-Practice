@@ -1,7 +1,7 @@
-﻿using Data.Model;
+﻿using App.Model;
 using Microsoft.EntityFrameworkCore;
 
-namespace Data.Database;
+namespace App.Database;
 
 public class CinemaContext: DbContext
 {

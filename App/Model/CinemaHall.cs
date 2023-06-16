@@ -1,4 +1,4 @@
-﻿namespace Data.Model;
+﻿namespace App.Model;
 
 public class CinemaHall
 {
