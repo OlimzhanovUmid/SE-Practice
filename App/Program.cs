@@ -3,7 +3,7 @@ using Data.Repository;
 
 
 //var repository = new Repository(ConnectionType.Sqlite, "Data Source = cinema.db");
-var repository = new Repository(ConnectionType.Sqlserver,
+Repository.Init(ConnectionType.Sqlserver,
     @"Server=(localdb)\msSqlLocalDb; Database=cinema; Trusted_Connection = true");
 Repository.EnsureDeleted();
 Repository.EnsureCreated();

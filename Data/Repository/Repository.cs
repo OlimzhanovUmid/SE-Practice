@@ -4,15 +4,21 @@ using Data.Model;
 
 namespace Data.Repository;
 
-public class Repository
+public static class Repository
 {
     private static CinemaContext Context { get; set; } = null!;
 
+    /*
     public Repository(ConnectionType connectionType, string connectionString)
     {
         Context = CinemaContextContainer.Init(connectionType, connectionString)!;
     }
+    */
 
+    public static void Init(ConnectionType connectionType, string connectionString)
+    {
+        Context = CinemaContextContainer.Init(connectionType, connectionString)!;
+    }
     public static void EnsureCreated()
     {
         Context.Database.EnsureCreated();
@@ -75,42 +81,42 @@ public class Repository
 
     #region RemoveFromBase
     
-    public void RemoveCinemaHall(CinemaHall entity)
+    public static void RemoveCinemaHall(CinemaHall entity)
     {
         Context.CinemaHalls.Remove(entity);
     }
     
-    public void RemoveCinemaHallsRange(IEnumerable<CinemaHall> entities)
+    public static void RemoveCinemaHallsRange(IEnumerable<CinemaHall> entities)
     {
         Context.CinemaHalls.RemoveRange(entities);
     }
     
-    public void RemoveSession(Session entity)
+    public static void RemoveSession(Session entity)
     {
         Context.Sessions.Remove(entity);
     }
     
-    public void RemoveSessionsRange(IEnumerable<Session> entities)
+    public static void RemoveSessionsRange(IEnumerable<Session> entities)
     {
         Context.Sessions.RemoveRange(entities);
     }
     
-    public void RemoveOrder(Order entity)
+    public static void RemoveOrder(Order entity)
     {
         Context.Orders.Remove(entity);
     }
     
-    public void RemoveOrdersRange(IEnumerable<Order> entities)
+    public static void RemoveOrdersRange(IEnumerable<Order> entities)
     {
         Context.Orders.RemoveRange(entities);
     }
     
-    public void RemoveUser(User entity)
+    public static void RemoveUser(User entity)
     {
         Context.Users.Remove(entity);
     }
 
-    public void RemoveUsersRange(IEnumerable<User> entities)
+    public static void RemoveUsersRange(IEnumerable<User> entities)
     {
         Context.Users.RemoveRange(entities);
     }
