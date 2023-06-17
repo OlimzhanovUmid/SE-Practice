@@ -193,7 +193,7 @@ public static class Seed
 
         var cinemaHall6 = new CinemaHall
         {
-            NumberOfSeats = 2,
+            NumberOfSeats = 3,
             Class = "Premium"
         };
 
@@ -263,7 +263,7 @@ public static class Seed
 
         var cinemaHall8 = new CinemaHall
         {
-            NumberOfSeats = 2,
+            NumberOfSeats = 4,
             Class = "S"
         };
 
@@ -298,7 +298,7 @@ public static class Seed
 
         var cinemaHall9 = new CinemaHall
         {
-            NumberOfSeats = 2,
+            NumberOfSeats = 6,
             Class = "BussinesMas"
         };
 
@@ -333,7 +333,7 @@ public static class Seed
 
         var cinemaHall10 = new CinemaHall
         {
-            NumberOfSeats = 2,
+            NumberOfSeats = 7,
             Class = "Est deshevle"
         };
 
