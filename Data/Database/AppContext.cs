@@ -55,5 +55,8 @@ public class AppContext: DbContext
         modelBuilder.Entity<User>()
             .Property(u => u.PhoneNumber)
             .HasMaxLength(13).IsFixedLength();
+
+        modelBuilder.Entity<Order>().HasOne(s => s.Session);
+        modelBuilder.Entity<Order>().HasOne(u => u.User);
     }
 }
