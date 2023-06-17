@@ -8,8 +8,7 @@ public class AppContext: DbContext
     private ConnectionType Type { get; set; } = ConnectionType.Sqlite;
     private string? ConnectionString { get; set; }
 
-    private readonly string _localDbConnectionString =
-        @"Server=(localdb)\msSqlLocalDb; Database=cinema; Trusted_Connection = true";
+    private const string LocalDbConnectionString = @"Server=(localdb)\msSqlLocalDb; Database=cinema; Trusted_Connection = true";
 
     public AppContext(string newConnectionString)
     {
@@ -32,16 +31,23 @@ public class AppContext: DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        if (Type.Equals(ConnectionType.Sqlite))
+        switch (Type)
         {
-            optionsBuilder.UseSqlite(ConnectionString);
-        } else if(Type.Equals(ConnectionType.Sqlserver))
-        {
-            optionsBuilder.UseSqlServer(ConnectionString);
+            case ConnectionType.Sqlite:
+                optionsBuilder.UseSqlite(ConnectionString);
+                break;
+            case ConnectionType.Sqlserver:
+                optionsBuilder.UseSqlServer(ConnectionString);
+                break;
+            case ConnectionType.SqlserverLocaldb:
+            default:
+                optionsBuilder.UseSqlServer(LocalDbConnectionString);
+                break;
         }
-        else
-        {
-            optionsBuilder.UseSqlServer(_localDbConnectionString);
-        }
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
     }
 }
