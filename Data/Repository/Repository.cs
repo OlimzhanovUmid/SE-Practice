@@ -12,12 +12,12 @@ public static class Repository
 
     public static void Init(ConnectionType connectionType, string connectionString)
     {
-        Context = CinemaContextContainer.Init(connectionType, connectionString)!;
+        Context = ContextContainer.Init(connectionType, connectionString)!;
     }
 
     public static void Init(ConnectionType connectionType)
     {
-        Context = CinemaContextContainer.Init(connectionType)!;
+        Context = ContextContainer.Init(connectionType)!;
     }
     public static void EnsureCreated()
     {
@@ -277,7 +277,7 @@ public static class Repository
     
     public static class SqlRaw
     {
-        public static IEnumerable<User> GetUsersWhoNameLike(string scratch) => Context.Users.FromSqlRaw($"SELECT * FROM Users WHERE FullName LIKE %{scratch}%").ToList();
+        public static IEnumerable<User> GetUsersWithNameLike(string scratch) => Context.Users.FromSqlRaw($"SELECT * FROM Users WHERE FullName LIKE %{scratch}%").ToList();
 
         public static IEnumerable<Order> GetOrdersCheaperThan(int price) => Context.Orders.FromSqlRaw($"SELECT * FROM Orders WHERE Price >= {price}").ToList();
 
