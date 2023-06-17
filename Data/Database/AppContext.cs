@@ -49,5 +49,11 @@ public class AppContext: DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<User>()
+            .Property(u => u.CardCredentials)
+            .HasMaxLength(19);
+        modelBuilder.Entity<User>()
+            .Property(u => u.PhoneNumber)
+            .HasMaxLength(13).IsFixedLength();
     }
 }
