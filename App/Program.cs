@@ -1,13 +1,56 @@
 ﻿using Data.Model;
 using Data.Repository;
 
+Console.WriteLine("Choose connection type:");
+Console.WriteLine("1. Sqlite\n2. Sql Server\n3. Sql Server LocalDb");
+Console.Write("Input connection type:");
+var userInput = Console.ReadLine();
+switch (userInput)
+{
+    case "1":
+        Repository.Init(ConnectionType.Sqlite, "Data Source = cinema.db");
+        Thread.Sleep(1000);
+        Console.WriteLine("You have chosen: Sqlite");
+        break;
+    case "2":
+        Repository.Init(ConnectionType.Sqlserver,
+            @"Server=(localdb)\msSqlLocalDb; Database=cinema; Trusted_Connection = true");
+        Thread.Sleep(1000);
+        Console.WriteLine("You have chosen: Sql Server");
+        break;
+    case "3":
+        Repository.Init(ConnectionType.SqlserverLocaldb);
+        Thread.Sleep(1000);
+        Console.WriteLine("You have chosen: Sql Server localDb");
+        break;
+    default:
+        Console.WriteLine("Choose between 1 and 3!!!");
+        return;
+}
 
-//Repository.Init(ConnectionType.Sqlite, "Data Source = cinema.db");
-/*
-Repository.Init(ConnectionType.Sqlserver,
-    @"Server=(localdb)\msSqlLocalDb; Database=cinema; Trusted_Connection = true");
-*/
-Repository.Init(ConnectionType.SqlserverLocaldb);
+userInput = "";
+Thread.Sleep(1000);
+Console.Clear();
+
+Console.WriteLine("Choose Query type:");
+Console.WriteLine("1. LINQ\n 2. SQL Raw");
+userInput = Console.ReadLine();
+switch (userInput)
+{
+    case "1":
+        Console.WriteLine("You have chosen: LINQ");
+        Thread.Sleep(1000);
+        Console.Clear();
+        break;
+    case "2":
+        Console.WriteLine("You have chosen: SQL Raw");
+        Thread.Sleep(1000);
+        Console.Clear();
+        break;
+    default:
+        Console.WriteLine("Choose between 1 and 3!!!");
+        return;
+}
 Repository.EnsureDeleted();
 Repository.EnsureCreated();
 Seed.Init();
@@ -50,4 +93,5 @@ Repository.SaveChanges();
 
 var toPrint = Repository.PrintOrders();
 Console.WriteLine(toPrint);
-
+Thread.Sleep(1000);
+Console.Clear();
