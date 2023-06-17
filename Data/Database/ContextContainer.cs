@@ -2,9 +2,9 @@
 
 namespace Data.Database;
 
-public class CinemaContextContainer
+public static class ContextContainer
 {
-    private static AppContext _context;
+    private static AppContext? _context;
 
     public static AppContext? Init(ConnectionType connectionType, string connectionString)
     {
