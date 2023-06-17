@@ -4,5 +4,7 @@ public enum ConnectionType
 {
     Sqlite,
     Sqlserver,
-    SqlserverLocaldb
+    SqlserverLocaldb,
+    SqlserverWithFluentApi,
+    SqlserverLocaldbWithFluentApi
 }
