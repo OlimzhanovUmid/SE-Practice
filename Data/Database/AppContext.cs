@@ -5,39 +5,44 @@ namespace Data.Database;
 
 public class AppContext: DbContext
 {
+    private static AppContext? _context;
     private ConnectionType Type { get; set; } = ConnectionType.Sqlite;
-    private string? ConnectionString { get; set; }
+    private string? ConnString { get; set; }
 
-    private const string LocalDbConnectionString = @"Server=(localdb)\msSqlLocalDb; Database=cinema; Trusted_Connection = true";
+    private const string LocalDbConnectionString 
+        = @"Server=(localdb)\msSqlLocalDb; Database=cinema; Trusted_Connection = true";
 
-    public AppContext(string newConnectionString)
-    {
-        ConnectionString = newConnectionString;
+    #region Private constructors
+
+    private AppContext(string newConnString) { ConnString = newConnString; }
+
+    private AppContext(ConnectionType newType) { Type = newType; }
+
+    private AppContext(ConnectionType newType, string newConnString) { 
+        Type = newType; 
+        ConnString = newConnString;
     }
-    public AppContext(ConnectionType newType)
-    {
-        Type = newType;
-    }
-    public AppContext(ConnectionType newType, string newConnectionString)
-    {
-        Type = newType;
-        ConnectionString = newConnectionString;
-    }
-    
+
+    #endregion
+
+    #region DbSets
+
     public DbSet<CinemaHall> CinemaHalls { get; set; } = null!;
     public DbSet<Session> Sessions { get; set; } = null!;
     public DbSet<User> Users { get; set; } = null!;
     public DbSet<Order> Orders { get; set; } = null!;
+    
+    #endregion
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         switch (Type)
         {
             case ConnectionType.Sqlite:
-                optionsBuilder.UseSqlite(ConnectionString);
+                optionsBuilder.UseSqlite(ConnString);
                 break;
             case ConnectionType.Sqlserver:
-                optionsBuilder.UseSqlServer(ConnectionString);
+                optionsBuilder.UseSqlServer(ConnString);
                 break;
             case ConnectionType.SqlserverLocaldb:
             default:
@@ -59,4 +64,11 @@ public class AppContext: DbContext
         modelBuilder.Entity<Order>().HasOne(s => s.Session);
         modelBuilder.Entity<Order>().HasOne(u => u.User);
     }
+    
+    public static AppContext 
+        Init(ConnectionType type,
+            string connectionString) => _context ??= new AppContext(type, connectionString);
+
+    public static AppContext 
+        Init(ConnectionType type) => _context ??= new AppContext(type);
 }
